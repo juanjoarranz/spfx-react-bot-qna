@@ -3,6 +3,8 @@ import { css } from 'office-ui-fabric-react';
 import { TextField } from 'office-ui-fabric-react';
 import styles from './BotFrameworkChat.module.scss';
 import { IBotFrameworkChatProps } from './IBotFrameworkChatProps';
+import * as showdown from 'showdown';
+
 declare function require(path: string) : any;
 
 export default class BotFrameworkChat extends React.Component<IBotFrameworkChatProps, {}> {
@@ -133,18 +135,24 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
   protected printMessage(message) {
     if (message.text) {
       this.setState({
-        message: this.currentMessageText,
+        message: this.currentMessageText
       });
 
       if (!this.messagesHtml) {
         this.messagesHtml = '';
       }
 
-      message.text = message.text.replace( /\n/g, '<br/>' );
+      let messageHtml: string = message.text.replace( /\n/g, '<br/>' );
+      let converter = new showdown.Converter();
+      messageHtml = converter.makeHtml( messageHtml );
+
+      // get all links that are not html-ready yet and convert them to html
+      let linksToHtml = messageHtml.match( /[^"'](https:\/\/[^\s]+)/g ).map( s => s.replace( /[^h]*/, '' ));
+      linksToHtml.forEach( link => messageHtml = messageHtml.replace( link, `<a href="${link}">${link}</a>` ) );
 
       this.messagesHtml = this.messagesHtml + ' <span class="' + styles.message + ' '
         + styles.fromBot + ' ms-fontSize-m" style="background-color:#' + this.props.botMessagesBackgroundColor
-        + '; color:#' + this.props.botMessagesForegroundColor + '">' + message.text + '</span> ';
+        + '; color:#' + this.props.botMessagesForegroundColor + '">' + messageHtml + '</span> ';
       this.forceUpdate();
 
       this.forceMessagesContainerScroll();
