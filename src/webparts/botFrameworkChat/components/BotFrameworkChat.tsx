@@ -140,6 +140,8 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
         this.messagesHtml = '';
       }
 
+      message.text = message.text.replace( /\n/g, '<br/>' );
+
       this.messagesHtml = this.messagesHtml + ' <span class="' + styles.message + ' '
         + styles.fromBot + ' ms-fontSize-m" style="background-color:#' + this.props.botMessagesBackgroundColor
         + '; color:#' + this.props.botMessagesForegroundColor + '">' + message.text + '</span> ';
