@@ -12,4 +12,5 @@ export interface IBotFrameworkChatProps {
   userMessagesBackgroundColor: string;
   userMessagesForegroundColor: string;
   context: IWebPartContext;
+  messagesRowHeight: number;
 }

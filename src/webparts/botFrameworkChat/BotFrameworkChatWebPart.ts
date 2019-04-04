@@ -22,6 +22,7 @@ export interface IBotFrameworkChatWebPartProps {
   botMessagesForegroundColor: string;
   userMessagesBackgroundColor: string;
   userMessagesForegroundColor: string;
+  messagesRowHeight: string;
 }
 
 export default class BotFrameworkChatWebPart extends BaseClientSideWebPart<IBotFrameworkChatWebPartProps> {
@@ -40,6 +41,7 @@ export default class BotFrameworkChatWebPart extends BaseClientSideWebPart<IBotF
       botMessagesForegroundColor: this.properties.botMessagesForegroundColor,
       userMessagesBackgroundColor: this.properties.userMessagesBackgroundColor,
       userMessagesForegroundColor: this.properties.userMessagesForegroundColor,
+      messagesRowHeight: Number(this.properties.messagesRowHeight),
       context: this.context
     });
 
@@ -78,6 +80,9 @@ export default class BotFrameworkChatWebPart extends BaseClientSideWebPart<IBotF
                 }),
                 PropertyPaneTextField('placeholderText', {
                   label: 'Placeholder text'
+                } ),
+                PropertyPaneTextField('messagesRowHeight', {
+                  label: 'Chat Bot Height (pixels)'
                 }),
                 PropertyPaneTextField('titleBarBackgroundColor', {
                   label: 'Title bar background color',
@@ -111,7 +116,7 @@ export default class BotFrameworkChatWebPart extends BaseClientSideWebPart<IBotF
       ]
     };
   }
-  
+
   private _validateColorPropertyAsync(value: string): string {
     var colorRegex = /^([a-zA-Z0-9]){6}$/;
     if (!value || colorRegex.test(value) == false) {

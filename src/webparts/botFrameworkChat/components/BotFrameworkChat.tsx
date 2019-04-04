@@ -24,7 +24,7 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
           <div className={css('ms-Grid-row ms-font-xl', styles.chatHeader)} style={{ backgroundColor: '#' + this.props.titleBarBackgroundColor }} >
             {this.props.title}
           </div>
-          <div className={css('ms-Grid-row', styles.messagesRow)} >
+          <div className={css( 'ms-Grid-row', styles.messagesRow )} style={{ height: this.props.messagesRowHeight }}>
             <div className='ms-Grid-col ms-u-sm12' ref='messageHistoryDiv' dangerouslySetInnerHTML={{ __html: this.getMessagesHtml() }}>
             </div>
           </div>
