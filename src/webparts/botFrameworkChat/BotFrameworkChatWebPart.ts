@@ -4,7 +4,8 @@ import { Version } from '@microsoft/sp-core-library';
 import {
   BaseClientSideWebPart,
   IPropertyPaneConfiguration,
-  PropertyPaneTextField
+  PropertyPaneTextField,
+  PropertyPaneSlider
 } from '@microsoft/sp-webpart-base';
 
 import * as strings from 'BotFrameworkChatWebPartStrings';
@@ -81,14 +82,17 @@ export default class BotFrameworkChatWebPart extends BaseClientSideWebPart<IBotF
                 PropertyPaneTextField('placeholderText', {
                   label: 'Placeholder text'
                 } ),
-                PropertyPaneTextField('messagesRowHeight', {
-                  label: 'Chat Bot Height (pixels)'
-                }),
+                PropertyPaneSlider('messagesRowHeight', {
+                  label: 'Chat Bot Height (pixels)',
+                  min: 200,
+                  max: 600,
+                  step: 10
+                } ),
                 PropertyPaneTextField('titleBarBackgroundColor', {
                   label: 'Title bar background color',
                   onGetErrorMessage: this._validateColorPropertyAsync.bind(this), // validation function
                   deferredValidationTime: 500 // delay after which to run the validation function
-                }),
+                } ),
                 PropertyPaneTextField('botMessagesBackgroundColor', {
                   label: 'Bot messages background color',
                   onGetErrorMessage: this._validateColorPropertyAsync.bind(this), // validation function
