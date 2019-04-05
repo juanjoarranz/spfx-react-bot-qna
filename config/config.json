@@ -13,6 +13,7 @@
   },
   "externals": {},
   "localizedResources": {
-    "BotFrameworkChatWebPartStrings": "lib/webparts/botFrameworkChat/loc/{locale}.js"
+    "BotFrameworkChatWebPartStrings": "lib/webparts/botFrameworkChat/loc/{locale}.js",
+    "PropertyControlStrings": "node_modules/@pnp/spfx-property-controls/lib/loc/{locale}.js"
   }
 }
