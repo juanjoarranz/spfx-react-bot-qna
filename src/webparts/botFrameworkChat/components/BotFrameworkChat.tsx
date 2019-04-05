@@ -151,7 +151,7 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
       linksToHtml.forEach( link => messageHtml = messageHtml.replace( link, `<a href="${link}">${link}</a>` ) );
 
       this.messagesHtml = this.messagesHtml + ' <span class="' + styles.message + ' '
-        + styles.fromBot + ' ms-fontSize-m" style="background-color:#' + this.props.botMessagesBackgroundColor
+        + styles.fromBot + ' ms-fontSize-m" style="background-color:' + this.props.botMessagesBackgroundColor
         + '; color:#' + this.props.botMessagesForegroundColor + '">' + messageHtml + '</span> ';
       this.forceUpdate();
 
