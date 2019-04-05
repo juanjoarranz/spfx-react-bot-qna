@@ -13,48 +13,48 @@ import BotFrameworkChat from './components/BotFrameworkChat';
 import { IBotFrameworkChatProps } from './components/IBotFrameworkChatProps';
 
 export interface IBotFrameworkChatWebPartProps {
-  description: string;
-  message: string;
-  directLineSecret: string;
-  title: string;
-  placeholderText: string;
-  titleBarBackgroundColor : string;
-  botMessagesBackgroundColor: string;
-  botMessagesForegroundColor: string;
+  description                : string;
+  message                    : string;
+  directLineSecret           : string;
+  title                      : string;
+  placeholderText            : string;
+  titleBarBackgroundColor    : string;
+  botMessagesBackgroundColor : string;
+  botMessagesForegroundColor : string;
   userMessagesBackgroundColor: string;
   userMessagesForegroundColor: string;
-  messagesRowHeight: string;
+  messagesRowHeight          : string;
 }
 
 export default class BotFrameworkChatWebPart extends BaseClientSideWebPart<IBotFrameworkChatWebPartProps> {
 
   public render(): void {
-    const element: React.ReactElement<IBotFrameworkChatProps > = React.createElement(
+    const element: React.ReactElement<IBotFrameworkChatProps> = React.createElement(
       BotFrameworkChat,
       {
-      description: this.properties.description,
-      message: '',
-      title: this.properties.title,
-      placeholderText: this.properties.placeholderText,
-      directLineSecret: this.properties.directLineSecret,
-      titleBarBackgroundColor: this.properties.titleBarBackgroundColor,
-      botMessagesBackgroundColor: this.properties.botMessagesBackgroundColor,
-      botMessagesForegroundColor: this.properties.botMessagesForegroundColor,
-      userMessagesBackgroundColor: this.properties.userMessagesBackgroundColor,
-      userMessagesForegroundColor: this.properties.userMessagesForegroundColor,
-      messagesRowHeight: Number(this.properties.messagesRowHeight),
-      context: this.context
-    });
+        description                : this.properties.description,
+        message                    : '',
+        title                      : this.properties.title,
+        placeholderText            : this.properties.placeholderText,
+        directLineSecret           : this.properties.directLineSecret,
+        titleBarBackgroundColor    : this.properties.titleBarBackgroundColor,
+        botMessagesBackgroundColor : this.properties.botMessagesBackgroundColor,
+        botMessagesForegroundColor : this.properties.botMessagesForegroundColor,
+        userMessagesBackgroundColor: this.properties.userMessagesBackgroundColor,
+        userMessagesForegroundColor: this.properties.userMessagesForegroundColor,
+        messagesRowHeight          : Number( this.properties.messagesRowHeight ),
+        context                    : this.context
+      } );
 
-    ReactDom.render(element, this.domElement);
+    ReactDom.render( element, this.domElement );
   }
 
   protected onDispose(): void {
-    ReactDom.unmountComponentAtNode(this.domElement);
+    ReactDom.unmountComponentAtNode( this.domElement );
   }
 
   protected get dataVersion(): Version {
-    return Version.parse('1.0');
+    return Version.parse( '1.0' );
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -68,27 +68,27 @@ export default class BotFrameworkChatWebPart extends BaseClientSideWebPart<IBotF
             {
               groupName: 'Bot Connection',
               groupFields: [
-                PropertyPaneTextField('directLineSecret', {
+                PropertyPaneTextField( 'directLineSecret', {
                   label: 'Direct Line Secret'
-                })
+                } )
               ]
             },
             {
               groupName: 'Appearance',
               groupFields: [
-                PropertyPaneTextField('title', {
+                PropertyPaneTextField( 'title', {
                   label: 'Title'
-                }),
-                PropertyPaneTextField('placeholderText', {
+                } ),
+                PropertyPaneTextField( 'placeholderText', {
                   label: 'Placeholder text'
                 } ),
-                PropertyPaneSlider('messagesRowHeight', {
+                PropertyPaneSlider( 'messagesRowHeight', {
                   label: 'Chat Bot Height (pixels)',
                   min: 200,
                   max: 600,
                   step: 10
                 } ),
-                PropertyFieldColorPicker('titleBarBackgroundColor', {
+                PropertyFieldColorPicker( 'titleBarBackgroundColor', {
                   label: 'Title bar background color',
                   selectedColor: this.properties.titleBarBackgroundColor,
                   onPropertyChange: this.onPropertyPaneFieldChanged,
@@ -99,8 +99,8 @@ export default class BotFrameworkChatWebPart extends BaseClientSideWebPart<IBotF
                   style: PropertyFieldColorPickerStyle.Full,
                   iconName: 'Precipitation',
                   key: 'colorFieldId'
-                }),
-                PropertyFieldColorPicker('botMessagesBackgroundColor', {
+                } ),
+                PropertyFieldColorPicker( 'botMessagesBackgroundColor', {
                   label: 'Bot messages background color',
                   selectedColor: this.properties.botMessagesBackgroundColor,
                   onPropertyChange: this.onPropertyPaneFieldChanged,
@@ -111,8 +111,8 @@ export default class BotFrameworkChatWebPart extends BaseClientSideWebPart<IBotF
                   style: PropertyFieldColorPickerStyle.Full,
                   iconName: 'Precipitation',
                   key: 'colorFieldId'
-                }),
-                PropertyFieldColorPicker('botMessagesForegroundColor', {
+                } ),
+                PropertyFieldColorPicker( 'botMessagesForegroundColor', {
                   label: 'Bot messages foreground color',
                   selectedColor: this.properties.botMessagesForegroundColor,
                   onPropertyChange: this.onPropertyPaneFieldChanged,
@@ -124,7 +124,7 @@ export default class BotFrameworkChatWebPart extends BaseClientSideWebPart<IBotF
                   iconName: 'Precipitation',
                   key: 'colorFieldId'
                 } ),
-                PropertyFieldColorPicker('userMessagesBackgroundColor', {
+                PropertyFieldColorPicker( 'userMessagesBackgroundColor', {
                   label: 'User messages background color',
                   selectedColor: this.properties.userMessagesBackgroundColor,
                   onPropertyChange: this.onPropertyPaneFieldChanged,
@@ -136,7 +136,7 @@ export default class BotFrameworkChatWebPart extends BaseClientSideWebPart<IBotF
                   iconName: 'Precipitation',
                   key: 'colorFieldId'
                 } ),
-                PropertyFieldColorPicker('userMessagesForegroundColor', {
+                PropertyFieldColorPicker( 'userMessagesForegroundColor', {
                   label: 'User messages foreground color',
                   selectedColor: this.properties.userMessagesForegroundColor,
                   onPropertyChange: this.onPropertyPaneFieldChanged,
@@ -156,9 +156,9 @@ export default class BotFrameworkChatWebPart extends BaseClientSideWebPart<IBotF
     };
   }
 
-  private _validateColorPropertyAsync(value: string): string {
+  private _validateColorPropertyAsync( value: string ): string {
     var colorRegex = /^([a-zA-Z0-9]){6}$/;
-    if (!value || colorRegex.test(value) == false) {
+    if ( !value || colorRegex.test( value ) == false ) {
       return "Please enter a valid 6 character hex color value";
     }
 
