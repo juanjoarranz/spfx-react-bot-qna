@@ -96,7 +96,7 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
       }
 
       this.messagesHtml = this.messagesHtml + ' <span class="' + styles.message
-        + ' ' + styles.fromUser + '  ms-fontSize-mPlus" style="background-color:#' + this.props.userMessagesBackgroundColor
+        + ' ' + styles.fromUser + '  ms-fontSize-mPlus" style="background-color:' + this.props.userMessagesBackgroundColor
         + '; color:#' + this.props.userMessagesForegroundColor + '">' + e.target.value + '</span> ';
 
       this.directLineClient.Conversations.Conversations_PostMessage(

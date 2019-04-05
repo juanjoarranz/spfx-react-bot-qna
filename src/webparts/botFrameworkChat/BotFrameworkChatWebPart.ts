@@ -124,11 +124,18 @@ export default class BotFrameworkChatWebPart extends BaseClientSideWebPart<IBotF
                   iconName: 'Precipitation',
                   key: 'colorFieldId'
                 } ),
-                PropertyPaneTextField('userMessagesBackgroundColor', {
+                PropertyFieldColorPicker('userMessagesBackgroundColor', {
                   label: 'User messages background color',
-                  onGetErrorMessage: this._validateColorPropertyAsync.bind(this), // validation function
-                  deferredValidationTime: 500 // delay after which to run the validation function
-                }),
+                  selectedColor: this.properties.userMessagesBackgroundColor,
+                  onPropertyChange: this.onPropertyPaneFieldChanged,
+                  properties: this.properties,
+                  disabled: false,
+                  isHidden: false,
+                  alphaSliderHidden: false,
+                  style: PropertyFieldColorPickerStyle.Full,
+                  iconName: 'Precipitation',
+                  key: 'colorFieldId'
+                } ),
                 PropertyPaneTextField('userMessagesForegroundColor', {
                   label: 'User messages foreground color',
                   onGetErrorMessage: this._validateColorPropertyAsync.bind(this), // validation function
