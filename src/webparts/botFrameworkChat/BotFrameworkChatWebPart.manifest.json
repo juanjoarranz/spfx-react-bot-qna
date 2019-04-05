@@ -25,7 +25,7 @@
       "placeholderText": "Type Your message",
       "title": "Web Chat Bot",
       "directLineSecret": "",
-      "titleBarBackgroundColor": "3C3C3C",
+      "titleBarBackgroundColor": "#3C3C3C",
       "botMessagesBackgroundColor": "f4f4f4",
       "botMessagesForegroundColor": "000000",
       "userMessagesBackgroundColor": "c7e0f4",

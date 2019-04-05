@@ -7,7 +7,7 @@ import {
   PropertyPaneTextField,
   PropertyPaneSlider
 } from '@microsoft/sp-webpart-base';
-
+import { PropertyFieldColorPicker, PropertyFieldColorPickerStyle } from '@pnp/spfx-property-controls/lib/PropertyFieldColorPicker';
 import * as strings from 'BotFrameworkChatWebPartStrings';
 import BotFrameworkChat from './components/BotFrameworkChat';
 import { IBotFrameworkChatProps } from './components/IBotFrameworkChatProps';
@@ -88,11 +88,18 @@ export default class BotFrameworkChatWebPart extends BaseClientSideWebPart<IBotF
                   max: 600,
                   step: 10
                 } ),
-                PropertyPaneTextField('titleBarBackgroundColor', {
+                PropertyFieldColorPicker('titleBarBackgroundColor', {
                   label: 'Title bar background color',
-                  onGetErrorMessage: this._validateColorPropertyAsync.bind(this), // validation function
-                  deferredValidationTime: 500 // delay after which to run the validation function
-                } ),
+                  selectedColor: this.properties.titleBarBackgroundColor,
+                  onPropertyChange: this.onPropertyPaneFieldChanged,
+                  properties: this.properties,
+                  disabled: false,
+                  isHidden: false,
+                  alphaSliderHidden: false,
+                  style: PropertyFieldColorPickerStyle.Full,
+                  iconName: 'Precipitation',
+                  key: 'colorFieldId'
+                }),
                 PropertyPaneTextField('botMessagesBackgroundColor', {
                   label: 'Bot messages background color',
                   onGetErrorMessage: this._validateColorPropertyAsync.bind(this), // validation function
