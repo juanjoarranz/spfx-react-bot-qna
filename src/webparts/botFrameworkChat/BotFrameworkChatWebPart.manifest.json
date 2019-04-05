@@ -29,7 +29,7 @@
       "botMessagesBackgroundColor": "#f4f4f4",
       "botMessagesForegroundColor": "#000000",
       "userMessagesBackgroundColor": "#c7e0f4",
-      "userMessagesForegroundColor": "000000",
+      "userMessagesForegroundColor": "#000000",
       "messagesRowHeight": "340"
     }
   }]
