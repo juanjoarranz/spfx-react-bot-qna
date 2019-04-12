@@ -142,17 +142,20 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
         this.messagesHtml = '';
       }
 
-      let messageHtml: string = message.text.replace( /\n/g, '<br/>' );
+      let answerHtml: string = message.text.replace( /\n/g, '<br/>' );
       let converter = new showdown.Converter();
-      messageHtml = converter.makeHtml( messageHtml );
+      answerHtml = converter.makeHtml( answerHtml );
 
       // get all links that are not html-ready yet and convert them to html
-      let linksToHtml = messageHtml.match( /[^"'](https:\/\/[^\s]+)/g ).map( s => s.replace( /[^h]*/, '' ));
-      linksToHtml.forEach( link => messageHtml = messageHtml.replace( link, `<a href="${link}">${link}</a>` ) );
+      let regex: RegExp = /[^"'](https:\/\/[^\s]+)/g;
+      if ( regex.test( answerHtml ) ) {
+        let linksToHtml = answerHtml.match( regex ).map( s => s.replace( /[^h]*/, '' ));
+        linksToHtml.forEach( link => answerHtml = answerHtml.replace( link, `<a href="${link}">${link}</a>` ) );
+      }
 
       this.messagesHtml = this.messagesHtml + ' <span class="' + styles.message + ' '
         + styles.fromBot + ' ms-fontSize-m" style="background-color:' + this.props.botMessagesBackgroundColor
-        + '; color:' + this.props.botMessagesForegroundColor + '">' + messageHtml + '</span> ';
+        + '; color:' + this.props.botMessagesForegroundColor + '">' + answerHtml + '</span> ';
       this.forceUpdate();
 
       this.forceMessagesContainerScroll();
