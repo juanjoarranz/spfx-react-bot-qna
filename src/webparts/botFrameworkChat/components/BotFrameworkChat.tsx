@@ -12,19 +12,19 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
   private pollInterval = 1000;
   private directLineClient;
   private conversationId;
-  private directLineClientSwagger;
+  private clientSwagger;
   private messagesHtml;
-  private currentMessageText;
+  private currentMessageToSend;
   private sendAsUserName;
+  private conversationUpdateEventText = 'conversationUpdate event detected';
 
   constructor( props, context ) {
     super( props );
     this.state = {
-      resolvedError: false,
+      resolvedError  : false,
       resolvedSuccess: false,
-      swaggerClient: null,
-      message: null,
-      error: ''
+      message        : null,
+      error          : ''
     };
   }
 
@@ -60,7 +60,7 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
             </div>
             <div className={css( 'ms-Grid-row' )}>
               <TextField id='MessageBox' onKeyUp={( e ) => this.tbKeyUp( e )} onKeyDown={( e ) => this.tbKeyDown( e )}
-                value={this.currentMessageText} placeholder={this.props.placeholderText} className={css( 'ms-fontSize-m', styles.messageBox )} />
+                value={this.currentMessageToSend} placeholder={this.props.placeholderText} className={css( 'ms-fontSize-m', styles.messageBox )} />
             </div>
           </div>
         </div>
@@ -82,14 +82,14 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
       );
     }
 
-    return <h6>...</h6>;
+    return <h6></h6>;
   }
 
   public componentDidMount(): void {
     console.log( 'component mounted' );
     if ( this.props.directLineSecret ) {
-      if ( !this.state.swaggerClient ) {
-        this._initSwaggerClient();
+      if ( !this.clientSwagger ) {
+        this._initClientSwagger();
 
       } else {
         this.setState( {
@@ -102,19 +102,18 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
   public componentDidUpdate( prevProps: IBotFrameworkChatProps, prevState: {}, prevContext: any ): void {
     console.log( 'component updated' );
     if ( this.props.directLineSecret ) {
-      if ( !this.state.swaggerClient ) {
-        this._initSwaggerClient();
+      if ( !this.clientSwagger ) {
+        this._initClientSwagger();
       }
     }
   }
 
-  private _initSwaggerClient() {
-    this._getSwaggerClient()
+  private _initClientSwagger() {
+    this._getClientSwagger()
       .then( client => {
         client.Conversations.Conversations_NewConversation()
           .then( ( response ) => response.obj.conversationId )
           .then( ( conversationId ) => {
-
             this.conversationId = conversationId;
             this.pollMessages( client, conversationId );
             this.directLineClient = client;
@@ -123,8 +122,8 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
         this.sendAsUserName = this.props.context.pageContext.user.loginName;
         this.printMessage = this.printMessage.bind( this );
 
+        this.clientSwagger = client;
         this.setState( {
-          swaggerClient: client,
           resolvedSuccess: true
         } );
 
@@ -132,23 +131,23 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
       .catch( error => { } );
   }
 
-  private _getSwaggerClient(): Promise<any> {
+  private _getClientSwagger(): Promise<any> {
     var Swagger = require( 'swagger-client' );
     var directLineSpec = require( './directline-swagger.json' );
 
     return new Promise( ( resolve, reject ) => {
-      this.directLineClientSwagger = new Swagger( {
-        spec: directLineSpec,
-        usePromise: true,
-      } ).then( ( client ) => {
-        client.clientAuthorizations.add( 'AuthorizationBotConnector', new Swagger.ApiKeyAuthorization( 'Authorization', 'BotConnector ' + this.props.directLineSecret, 'header' ) );
-        console.log( 'DirectLine client generated' );
-
-        //return client;
-        resolve( client );
-      } ).catch( ( err ) => {
-        console.error( 'Error initializing DirectLine client', err );
-        reject( err );
+      this.clientSwagger = new Swagger( {
+          spec: directLineSpec,
+          usePromise: true,
+        } )
+        .then( ( client ) => {
+          client.clientAuthorizations.add( 'AuthorizationBotConnector', new Swagger.ApiKeyAuthorization( 'Authorization', 'BotConnector ' + this.props.directLineSecret, 'header' ) );
+          console.log( 'DirectLine client generated' );
+          resolve( client );
+        } )
+        .catch( ( err ) => {
+          console.error( 'Error initializing DirectLine client', err );
+          reject( err );
       } );
     } );
   }
@@ -158,15 +157,15 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
   }
 
   public tbKeyUp( e ) {
-    this.currentMessageText = e.target.value;
+    this.currentMessageToSend = e.target.value;
     this.forceMessagesContainerScroll();
   }
 
   public tbKeyDown( e ) {
     if ( e.keyCode === 13 ) {
-      var messageToSend = this.currentMessageText;
+      var messageToSend = this.currentMessageToSend;
 
-      this.currentMessageText = '';
+      this.currentMessageToSend = '';
 
       this.setState( {
         message: '',
@@ -180,14 +179,13 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
         + ' ' + styles.fromUser + '  ms-fontSize-mPlus" style="background-color:' + this.props.userMessagesBackgroundColor
         + '; color:' + this.props.userMessagesForegroundColor + '">' + e.target.value + '</span> ';
 
-      this.directLineClient.Conversations.Conversations_PostMessage(
-        {
-          conversationId: this.conversationId,
-          message: {
-            from: this.sendAsUserName,
-            text: messageToSend
-          }
-        } ).catch( ( err ) => console.error( 'Error sending message:', err ) );
+      this.directLineClient.Conversations.Conversations_PostMessage( {
+        conversationId: this.conversationId,
+        message: {
+          from: this.sendAsUserName,
+          text: messageToSend
+        } } )
+        .catch( ( err ) => console.error( 'Error sending message:', err ) );
     }
   }
 
@@ -214,7 +212,11 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
   }
 
   protected printMessage( message ) {
-    if ( message.text ) {
+    // console.log( 'message.text = ', message.text );
+    // console.log( 'this.state.message = ', this.state.message );
+    // console.log( 'received message', message );
+
+    if ( message.text && message.text !== this.conversationUpdateEventText ) {
       this.setState( {
         message: message.text
       } );
