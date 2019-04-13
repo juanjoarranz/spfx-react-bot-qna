@@ -27,6 +27,8 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
       message        : null,
       error          : ''
     };
+
+    this.sendMessage = this.sendMessage.bind( this );
   }
 
   public render(): JSX.Element {
@@ -62,7 +64,7 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
             <div className={css( 'bot-inputbox-row' )} style={{position: 'relative', borderTopColor: '#d8d8d8'}}>
               <TextField id='MessageBox' onKeyUp={( e ) => this.tbKeyUp( e )} onKeyDown={( e ) => this.tbKeyDown( e )}
                 value={this.currentMessageToSend} placeholder={this.props.placeholderText} className={css( 'ms-fontSize-m', styles.messageBox )} />
-              <div style={{ height: 28, width: 28, overflow: 'hidden', padding: 6, position: 'absolute', top: -4, right: 0 }}>
+              <div style={{ height: 28, width: 28, overflow: 'hidden', padding: 6, position: 'absolute', top: -4, right: 0 }} onClick={this.sendMessage}>
                 <svg height="28" viewBox="0 0 45.7 33.8" width="28"><path d="M8.55 25.25l21.67-7.25H11zm2.41-9.47h19.26l-21.67-7.23zm-6 13l4-11.9L5 5l35.7 11.9z" fill="#8e8d8c" clip-rule="evenodd"></path></svg>
               </div>
             </div>
@@ -167,12 +169,18 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
 
   public tbKeyDown( e ) {
     if ( e.keyCode === 13 ) {
-      var messageToSend = this.currentMessageToSend;
+      this.sendMessage();
+    }
+  }
+
+  private sendMessage() {
+    if ( this.currentMessageToSend ) {
+      let messageToSend: string = this.currentMessageToSend;
 
       this.currentMessageToSend = '';
 
       this.setState( {
-        message: '',
+        message: ''
       } );
 
       if ( !this.messagesHtml ) {
@@ -181,7 +189,7 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
 
       this.messagesHtml = this.messagesHtml + ' <span class="' + styles.message
         + ' ' + styles.fromUser + '  ms-fontSize-mPlus" style="background-color:' + this.props.userMessagesBackgroundColor
-        + '; color:' + this.props.userMessagesForegroundColor + '">' + e.target.value + '</span> ';
+        + '; color:' + this.props.userMessagesForegroundColor + '">' + messageToSend + '</span> ';
 
       this.directLineClient.Conversations.Conversations_PostMessage( {
         conversationId: this.conversationId,
@@ -216,10 +224,6 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
   }
 
   protected printMessage( message ) {
-    // console.log( 'message.text = ', message.text );
-    // console.log( 'this.state.message = ', this.state.message );
-    // console.log( 'received message', message );
-
     if ( message.text && message.text !== this.conversationUpdateEventText ) {
       this.setState( {
         message: message.text
