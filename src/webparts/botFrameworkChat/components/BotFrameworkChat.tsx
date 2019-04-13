@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { css } from 'office-ui-fabric-react';
+import { css, hiddenContentStyle } from 'office-ui-fabric-react';
 import { TextField } from 'office-ui-fabric-react';
 import styles from './BotFrameworkChat.module.scss';
 import { IBotFrameworkChatProps } from './IBotFrameworkChatProps';
 import * as showdown from 'showdown';
+import './botstyles.css';
 
 declare function require( path: string ): any;
 
@@ -34,11 +35,11 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
       return (
         <div className={styles.botFrameworkChat}>
           <div className={styles.container}>
-            <div className={css( 'ms-Grid-row ms-font-xl', styles.chatHeader )} style={{ backgroundColor: this.props.titleBarBackgroundColor }} >
+            <div className={css( 'ms-Grid-rowZ ms-font-xl', styles.chatHeader )} style={{ backgroundColor: this.props.titleBarBackgroundColor }} >
               {this.props.title}
             </div>
 
-            <div className={css( 'ms-Grid-row' )}>
+            <div className={css( 'ms-Grid-rowZ' )}>
               <h3>Error Encountered:{this.state.error} </h3>
             </div>
           </div>
@@ -50,17 +51,20 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
     if ( this.state.resolvedSuccess ) {
       return (
         <div className={styles.botFrameworkChat}>
-          <div className={styles.container}>
-            <div className={css( 'ms-Grid-row ms-font-xl', styles.chatHeader )} style={{ backgroundColor: this.props.titleBarBackgroundColor }} >
+          <div className={styles.container} style={{ borderColor: this.props.titleBarBackgroundColor }}>
+            <div className={css( 'ms-Grid-rowZ ms-font-xl', styles.chatHeader )} style={{ backgroundColor: this.props.titleBarBackgroundColor }} >
               {this.props.title}
             </div>
-            <div className={css( 'ms-Grid-row', styles.messagesRow )} style={{ height: this.props.messagesRowHeight }}>
+            <div className={css( 'ms-Grid-rowZ', styles.messagesRow )} style={{ height: this.props.messagesRowHeight }}>
               <div className='ms-Grid-col ms-u-sm12' ref='messageHistoryDiv' dangerouslySetInnerHTML={{ __html: this.getMessagesHtml() }}>
               </div>
             </div>
-            <div className={css( 'ms-Grid-row' )}>
+            <div className={css( 'bot-inputbox-row' )} style={{position: 'relative', borderTopColor: '#d8d8d8'}}>
               <TextField id='MessageBox' onKeyUp={( e ) => this.tbKeyUp( e )} onKeyDown={( e ) => this.tbKeyDown( e )}
                 value={this.currentMessageToSend} placeholder={this.props.placeholderText} className={css( 'ms-fontSize-m', styles.messageBox )} />
+              <div style={{ height: 28, width: 28, overflow: 'hidden', padding: 6, position: 'absolute', top: -4, right: 0 }}>
+                <svg height="28" viewBox="0 0 45.7 33.8" width="28"><path d="M8.55 25.25l21.67-7.25H11zm2.41-9.47h19.26l-21.67-7.23zm-6 13l4-11.9L5 5l35.7 11.9z" fill="#8e8d8c" clip-rule="evenodd"></path></svg>
+              </div>
             </div>
           </div>
         </div>
@@ -71,10 +75,10 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
       return (
         <div className={styles.botFrameworkChat}>
           <div className={styles.container}>
-            <div className={css( 'ms-Grid-row ms-font-xl', styles.chatHeader )} style={{ backgroundColor: this.props.titleBarBackgroundColor }} >
+            <div className={css( 'ms-Grid-rowZ ms-font-xl', styles.chatHeader )} style={{ backgroundColor: this.props.titleBarBackgroundColor }} >
               {this.props.title}
             </div>
-            <div className={css( 'ms-Grid-row' )}>
+            <div className={css( 'ms-Grid-rowZ' )}>
               <h3>Enter the Bot Direct Line Secret in the web part properties</h3>
             </div>
           </div>

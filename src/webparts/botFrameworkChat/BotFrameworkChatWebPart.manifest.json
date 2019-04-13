@@ -22,7 +22,7 @@
     "officeFabricIconFontName": "Page",
     "properties": {
       "description": "SGS Web Chat Bot",
-      "placeholderText": "Type Your message",
+      "placeholderText": "Type Your message ...",
       "title": "Web Chat Bot",
       "directLineSecret": "",
       "titleBarBackgroundColor": "#3C3C3C",

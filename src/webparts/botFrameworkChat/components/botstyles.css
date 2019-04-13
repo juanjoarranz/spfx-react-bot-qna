@@ -1,0 +1,9 @@
+.bot-inputbox-row{
+  border-top: 0.5px solid;
+  background-color: #fafafa;
+}
+
+.ms-TextField-fieldGroup{
+  border: none !important;
+  background: none !important;
+}
