@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { css, hiddenContentStyle } from 'office-ui-fabric-react';
 import { TextField } from 'office-ui-fabric-react';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
 import styles from './BotFrameworkChat.module.scss';
 import { IBotFrameworkChatProps } from './IBotFrameworkChatProps';
 import * as showdown from 'showdown';
@@ -29,6 +31,7 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
     };
 
     this.sendMessage = this.sendMessage.bind( this );
+    this.refresh = this.refresh.bind( this );
   }
 
   public render(): JSX.Element {
@@ -51,20 +54,30 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
     }
 
     if ( this.state.resolvedSuccess ) {
+
+      let displayRefreshIcon = !this.messagesHtml || this.messagesHtml === '' ? 'none' : 'block';
+
       return (
         <div className={styles.botFrameworkChat}>
           <div className={styles.container} style={{ borderColor: this.props.titleBarBackgroundColor }}>
-            <div className={css( 'ms-Grid-rowZ ms-font-xl', styles.chatHeader )} style={{ backgroundColor: this.props.titleBarBackgroundColor }} >
+            <div className={css( 'ms-Grid-rowZ ms-font-xl', styles.chatHeader )} style={{ backgroundColor: this.props.titleBarBackgroundColor, position: 'relative' }} >
               {this.props.title}
+              <div className="refresh-icon" onClick={this.refresh} style={{ display: displayRefreshIcon }} >
+                <TooltipHost content="Refresh" id="refresh-icon-tooltip" calloutProps={{ gapSpace: 0 }}>
+                  <Icon iconName="Refresh"/>
+                </TooltipHost>
+              </div>
             </div>
+
             <div className={css( 'ms-Grid-rowZ', styles.messagesRow )} style={{ height: this.props.messagesRowHeight }}>
               <div className='ms-Grid-col ms-u-sm12' ref='messageHistoryDiv' dangerouslySetInnerHTML={{ __html: this.getMessagesHtml() }}>
               </div>
             </div>
-            <div className={css( 'bot-inputbox-row' )} style={{position: 'relative', borderTopColor: '#d8d8d8'}}>
+
+            <div className={css( 'bot-inputbox-row' )}>
               <TextField id='MessageBox' onKeyUp={( e ) => this.tbKeyUp( e )} onKeyDown={( e ) => this.tbKeyDown( e )}
                 value={this.currentMessageToSend} placeholder={this.props.placeholderText} className={css( 'ms-fontSize-m', styles.messageBox )} />
-              <div style={{ height: 28, width: 28, overflow: 'hidden', padding: 6, position: 'absolute', top: -4, right: 0 }} onClick={this.sendMessage}>
+              <div className={css( 'bot-sendbutton')} onClick={this.sendMessage}>
                 <svg height="28" viewBox="0 0 45.7 33.8" width="28"><path d="M8.55 25.25l21.67-7.25H11zm2.41-9.47h19.26l-21.67-7.23zm-6 13l4-11.9L5 5l35.7 11.9z" fill="#8e8d8c" clip-rule="evenodd"></path></svg>
               </div>
             </div>
@@ -260,6 +273,12 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
     var messagesRowClass = '.' + styles.messagesRow;
     var messagesDivElement = document.querySelector( messagesRowClass );
     messagesDivElement.scrollTop = messagesDivElement.scrollHeight;
+  }
+
+  private refresh() {
+    this.messagesHtml = '';
+    this.forceUpdate();
+    this.forceMessagesContainerScroll();
   }
 
 }
