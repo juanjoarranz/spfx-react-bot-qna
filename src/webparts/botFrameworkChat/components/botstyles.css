@@ -28,6 +28,10 @@
   border: 0.5px solid;
 }
 
+[class^="message"] p {
+  margin: 0;
+}
+
 .refresh-icon{
   position: absolute;
   top: 14px;
