@@ -3,12 +3,23 @@ import { css, hiddenContentStyle } from 'office-ui-fabric-react';
 import { TextField } from 'office-ui-fabric-react';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import styles from './BotFrameworkChat.module.scss';
 import { IBotFrameworkChatProps } from './IBotFrameworkChatProps';
 import * as showdown from 'showdown';
 import './botstyles.css';
 
 declare function require( path: string ): any;
+
+
+const BotSpinner = ( props: {show: boolean} ) => {
+  return (
+    <div style={{display: props.show ? 'block': 'none'}}>
+      <div style={{ content: "", clear: 'both', display: 'table' }}></div>
+      <Spinner size={SpinnerSize.xSmall} style={{ position: 'absolute', bottom: -15, right: 25 }} />
+    </div>
+  );
+}
 
 export default class BotFrameworkChat extends React.Component<IBotFrameworkChatProps, any> {
 
@@ -19,7 +30,9 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
   private messagesHtml;
   private currentMessageToSend;
   private sendAsUserName;
+  private displaySpinner = false;
   private conversationUpdateEventText = 'conversationUpdate event detected';
+  private botInitialized: boolean = false;
 
   constructor( props: IBotFrameworkChatProps, context ) {
     super( props );
@@ -69,7 +82,9 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
             </div>
 
             <div className={styles.messagesRow} style={{ height: this.props.messagesRowHeight }}>
-              <div className='ms-Grid-col ms-u-sm12' ref='messageHistoryDiv' dangerouslySetInnerHTML={{ __html: this.getMessagesHtml() }}>
+              <div style={{position: 'relative'}}>
+                <div className='ms-Grid-col ms-u-sm12' ref='messageHistoryDiv' dangerouslySetInnerHTML={{ __html: this.getMessagesHtml() }}></div>
+                <BotSpinner show={this.displaySpinner}/>
               </div>
             </div>
 
@@ -187,6 +202,7 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
 
   private sendMessage() {
     if ( this.currentMessageToSend ) {
+      this.displaySpinner = true;
       let messageToSend: string = this.currentMessageToSend;
 
       this.currentMessageToSend = '';
@@ -243,41 +259,52 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
   }
 
   protected printMessage( message ) {
-    if ( message.text && message.text !== this.conversationUpdateEventText ) {
-      this.setState( {
-        message: message.text
-      } );
 
-      if ( !this.messagesHtml ) {
-        this.messagesHtml = '';
+    if ( !this.botInitialized && this.props.botWelcomeMessage !== undefined && this.props.botWelcomeMessage !== '' && message.text === this.conversationUpdateEventText) {
+      this.displayReceivedMessage( this.props.botWelcomeMessage );
+    } else {
+      if ( message.text && message.text !== this.conversationUpdateEventText ) {
+        this.displayReceivedMessage( message.text );
       }
-
-      let answerHtml: string = message.text.replace( /\n/g, '<br/>' );
-      let converter = new showdown.Converter();
-      answerHtml = converter.makeHtml( answerHtml );
-
-      // get all links that are not html-ready yet and convert them to html
-      let regex: RegExp = /[^"'](https:\/\/[^\s]+)/g;
-      if ( regex.test( answerHtml ) ) {
-        let linksToHtml = answerHtml.match( regex ).map( s => s.replace( /[^h]*/, '' ) );
-        linksToHtml.forEach( link => answerHtml = answerHtml.replace( link, `<a href="${ link }">${ link }</a>` ) );
-      }
-
-      let chatTimeHtml = this.props.displayChatTime ?
-        `<div class="${ styles.timestamp }" style="left:0">${ this.props.title } at ${ new Date().toLocaleTimeString().replace( /:\d{2}$/, '' ) }</div>` : '';
-
-      this.messagesHtml +=
-        `<span class = "${ styles.message } ${ styles.fromBot } ms-fontSize-m"
-          style="background-color: ${this.props.botMessagesBackgroundColor }; color: ${ this.props.botMessagesForegroundColor }">
-            ${answerHtml }
-            <div class="${styles.calloutArrow }" style="left: -8px; top: 15px; background-color: ${ this.props.botMessagesBackgroundColor }"></div>
-            ${chatTimeHtml}
-        </span>`;
-
-      this.forceUpdate();
-
-      this.forceMessagesContainerScroll();
     }
+  }
+
+  private displayReceivedMessage( messageText ) {
+    this.setState( {
+      message: messageText
+    } );
+
+    if ( !this.messagesHtml ) {
+      this.messagesHtml = '';
+    }
+
+    let answerHtml: string = messageText.replace( /\n/g, '<br/>' );
+    let converter = new showdown.Converter();
+    answerHtml = converter.makeHtml( answerHtml );
+
+    // get all links that are not html-ready yet and convert them to html
+    let regex: RegExp = /[^"'](https:\/\/[^\s]+)/g;
+    if ( regex.test( answerHtml ) ) {
+      let linksToHtml = answerHtml.match( regex ).map( s => s.replace( /[^h]*/, '' ) );
+      linksToHtml.forEach( link => answerHtml = answerHtml.replace( link, `<a href="${ link }">${ link }</a>` ) );
+    }
+
+    let chatTimeHtml = this.props.displayChatTime ?
+      `<div class="${ styles.timestamp }" style="left:0">${ this.props.title } at ${ new Date().toLocaleTimeString().replace( /:\d{2}$/, '' ) }</div>` : '';
+
+    this.messagesHtml +=
+      `<span class = "${ styles.message } ${ styles.fromBot } ms-fontSize-m"
+        style="background-color: ${this.props.botMessagesBackgroundColor }; color: ${ this.props.botMessagesForegroundColor }">
+          ${answerHtml }
+          <div class="${styles.calloutArrow }" style="left: -8px; top: 15px; background-color: ${ this.props.botMessagesBackgroundColor }"></div>
+          ${chatTimeHtml}
+      </span>`;
+
+    this.displaySpinner = false;
+    this.botInitialized = true;
+    this.forceUpdate();
+    this.forceMessagesContainerScroll();
+
   }
 
   protected forceMessagesContainerScroll() {

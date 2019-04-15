@@ -25,7 +25,8 @@ export interface IBotFrameworkChatWebPartProps {
   userMessagesBackgroundColor: string;
   userMessagesForegroundColor: string;
   messagesRowHeight          : string;
-  displayChatTime             : boolean;
+  displayChatTime            : boolean;
+  botWelcomeMessage          : string;
 }
 
 export default class BotFrameworkChatWebPart extends BaseClientSideWebPart<IBotFrameworkChatWebPartProps> {
@@ -46,7 +47,8 @@ export default class BotFrameworkChatWebPart extends BaseClientSideWebPart<IBotF
         userMessagesForegroundColor: this.properties.userMessagesForegroundColor,
         messagesRowHeight          : Number( this.properties.messagesRowHeight ),
         context                    : this.context,
-        displayChatTime            : this.properties.displayChatTime
+        displayChatTime            : this.properties.displayChatTime,
+        botWelcomeMessage          : this.properties.botWelcomeMessage
       } );
 
     ReactDom.render( element, this.domElement );
@@ -81,6 +83,11 @@ export default class BotFrameworkChatWebPart extends BaseClientSideWebPart<IBotF
               groupFields: [
                 PropertyPaneTextField( 'title', {
                   label: 'Title'
+                } ),
+                PropertyPaneTextField( 'botWelcomeMessage', {
+                  label: 'Bot Welcome Message',
+                  multiline: true,
+                  rows: 3
                 } ),
                 PropertyPaneTextField( 'placeholderText', {
                   label: 'Placeholder text'

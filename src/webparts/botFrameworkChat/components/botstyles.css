@@ -24,7 +24,7 @@
   cursor: pointer;
 }
 
-[class^="propertyPaneGroupContent"] input[type="text"]{
+[class^="propertyPaneGroupContent"] input[type="text"], [class^="propertyPaneGroupContent"] textarea{
   border: 0.5px solid;
 }
 
