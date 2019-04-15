@@ -31,7 +31,7 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
     };
 
     this.sendMessage = this.sendMessage.bind( this );
-    this.refresh = this.refresh.bind( this );
+    this.restart = this.restart.bind( this );
   }
 
   public render(): JSX.Element {
@@ -62,8 +62,8 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
           <div className={styles.container} style={{ borderColor: this.props.titleBarBackgroundColor }}>
             <div className={css( 'ms-Grid-rowZ ms-font-xl', styles.chatHeader )} style={{ backgroundColor: this.props.titleBarBackgroundColor, position: 'relative' }} >
               {this.props.title}
-              <div className="refresh-icon" onClick={this.refresh} style={{ display: displayRefreshIcon }} >
-                <TooltipHost content="Refresh" id="refresh-icon-tooltip" calloutProps={{ gapSpace: 0 }}>
+              <div className="refresh-icon" onClick={this.restart} style={{ display: displayRefreshIcon }} >
+                <TooltipHost content="Restart" id="refresh-icon-tooltip" calloutProps={{ gapSpace: 0 }}>
                   <Icon iconName="Refresh"/>
                 </TooltipHost>
               </div>
@@ -275,7 +275,7 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
     messagesDivElement.scrollTop = messagesDivElement.scrollHeight;
   }
 
-  private refresh() {
+  private restart() {
     this.messagesHtml = '';
     this.forceUpdate();
     this.forceMessagesContainerScroll();

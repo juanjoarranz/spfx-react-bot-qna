@@ -30,10 +30,10 @@
 
 .refresh-icon{
   position: absolute;
-  top: 8px;
-  right: 10px;
+  top: 14px;
+  right: 12px;
   color: white;
-  font-size: 30px;
+  font-size: 20px;
 }
 .refresh-icon:hover{
   cursor: pointer;
