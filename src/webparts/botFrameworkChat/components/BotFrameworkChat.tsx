@@ -50,7 +50,6 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
           </div>
         </div>
       );
-
     }
 
     if ( this.state.resolvedSuccess ) {
@@ -60,7 +59,7 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
       return (
         <div className={styles.botFrameworkChat}>
           <div className={styles.container} style={{ borderColor: this.props.titleBarBackgroundColor }}>
-            <div className={css( 'ms-Grid-rowZ ms-font-xl', styles.chatHeader )} style={{ backgroundColor: this.props.titleBarBackgroundColor, position: 'relative' }} >
+            <div className={css( 'ms-font-xl', styles.chatHeader )} style={{ backgroundColor: this.props.titleBarBackgroundColor, position: 'relative' }} >
               {this.props.title}
               <div className="refresh-icon" onClick={this.restart} style={{ display: displayRefreshIcon }} >
                 <TooltipHost content="Restart" id="refresh-icon-tooltip" calloutProps={{ gapSpace: 0 }}>
@@ -69,7 +68,7 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
               </div>
             </div>
 
-            <div className={css( 'ms-Grid-rowZ', styles.messagesRow )} style={{ height: this.props.messagesRowHeight }}>
+            <div className={styles.messagesRow} style={{ height: this.props.messagesRowHeight }}>
               <div className='ms-Grid-col ms-u-sm12' ref='messageHistoryDiv' dangerouslySetInnerHTML={{ __html: this.getMessagesHtml() }}>
               </div>
             </div>
@@ -200,9 +199,12 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
         this.messagesHtml = '';
       }
 
-      this.messagesHtml = this.messagesHtml + ' <span class="' + styles.message
-        + ' ' + styles.fromUser + '  ms-fontSize-mPlus" style="background-color:' + this.props.userMessagesBackgroundColor
-        + '; color:' + this.props.userMessagesForegroundColor + '">' + messageToSend + '</span> ';
+      this.messagesHtml +=
+        `<span class = "${ styles.message } ${ styles.fromUser } ms-fontSize-mPlus"
+          style="background-color: ${this.props.userMessagesBackgroundColor }; color: ${ this.props.userMessagesForegroundColor }">
+            ${messageToSend }
+            <div class="${styles.calloutArrow}" style="right: -8px; top: 12px; background-color: ${this.props.userMessagesBackgroundColor }"></div>
+        </span>`;
 
       this.directLineClient.Conversations.Conversations_PostMessage( {
         conversationId: this.conversationId,
@@ -261,6 +263,7 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
         `<span class = "${ styles.message } ${ styles.fromBot } ms-fontSize-m"
           style="background-color: ${this.props.botMessagesBackgroundColor }; color: ${ this.props.botMessagesForegroundColor }">
             ${answerHtml }
+            <div class="${styles.calloutArrow}" style="left: -8px; top: 15px; background-color: ${this.props.botMessagesBackgroundColor }"></div>
         </span>`;
 
       this.forceUpdate();

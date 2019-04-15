@@ -33,6 +33,18 @@
     max-width:80%;
     margin: 5px;
     padding: 10px;
+    position: relative;
+
+    .calloutArrow{
+      position: absolute;
+      box-shadow: inherit;
+      box-sizing: border-box;
+      transform: rotate(45deg);
+      height: 16px;
+      width: 16px;
+      border: inherit;
+      //background: rgb(0, 120, 212);
+    }
 
     img{
       max-height: 320px;
