@@ -12,14 +12,14 @@ import './botstyles.css';
 declare function require( path: string ): any;
 
 
-const BotSpinner = ( props: {show: boolean} ) => {
+const BotSpinner = ( props: { show: boolean } ) => {
   return (
-    <div style={{display: props.show ? 'block': 'none'}}>
+    <div style={{ display: props.show ? 'block' : 'none' }}>
       <div style={{ content: "", clear: 'both', display: 'table' }}></div>
       <Spinner size={SpinnerSize.xSmall} style={{ position: 'absolute', bottom: -15, right: 25 }} />
     </div>
   );
-}
+};
 
 export default class BotFrameworkChat extends React.Component<IBotFrameworkChatProps, any> {
 
@@ -315,8 +315,11 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
 
   private restart() {
     this.messagesHtml = '';
-    this.forceUpdate();
-    this.forceMessagesContainerScroll();
+    if ( this.props.botWelcomeMessage && this.props.botWelcomeMessage !== '' ) {
+      this.displayReceivedMessage( this.props.botWelcomeMessage );
+    } else {
+      this.forceUpdate();
+      this.forceMessagesContainerScroll();
+    }
   }
-
 }
