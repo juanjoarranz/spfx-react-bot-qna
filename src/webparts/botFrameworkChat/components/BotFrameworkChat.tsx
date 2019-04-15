@@ -49,7 +49,7 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
 
   public render(): JSX.Element {
 
-    if ( this.state.resolveError ) {
+    if ( this.state.resolvedError ) {
       return (
         <div className={styles.botFrameworkChat}>
           <div className={styles.container}>
@@ -58,7 +58,7 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
             </div>
 
             <div className={css( 'ms-Grid-rowZ' )}>
-              <h3>Error Encountered:{this.state.error} </h3>
+              <h3 style={{color: 'red'}}>Error: Invalid Direct Line Secret in the web part properties</h3>
             </div>
           </div>
         </div>
@@ -121,7 +121,7 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
   public componentDidMount(): void {
     console.log( 'component mounted' );
     if ( this.props.directLineSecret ) {
-      if ( !this.clientSwagger ) {
+      if ( !this.directLineClient ) {
         this._initClientSwagger();
 
       } else {
@@ -134,10 +134,13 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
 
   public componentDidUpdate( prevProps: IBotFrameworkChatProps, prevState: {}, prevContext: any ): void {
     console.log( 'component updated' );
-    if ( this.props.directLineSecret ) {
-      if ( !this.clientSwagger ) {
+    console.log( 'previous prevProps.directLineSecret', prevProps.directLineSecret );
+    console.log( 'curren directLineSecret', this.props.directLineSecret );
+
+    if ( this.props.directLineSecret && this.props.directLineSecret !== prevProps.directLineSecret) {
+      //if ( !this.clientSwagger ) {
         this._initClientSwagger();
-      }
+      //}
     }
   }
 
@@ -150,15 +153,36 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
             this.conversationId = conversationId;
             this.pollMessages( client, conversationId );
             this.directLineClient = client;
+
+
+            this.sendAsUserName = this.props.context.pageContext.user.loginName;
+            this.printMessage = this.printMessage.bind( this );
+
+           // this.clientSwagger = client;
+            this.setState( {
+              resolvedError: false,
+              resolvedSuccess: true
+            } );
+
+          } )
+          .catch( error => {
+            console.log( 'Client Swagger Creation Error', error );
+            this.clientSwagger = null;
+            this.setState( {
+              resolvedSuccess: false,
+              resolvedError: true,
+              error: error.obj.error.message
+            })
           } );
 
-        this.sendAsUserName = this.props.context.pageContext.user.loginName;
-        this.printMessage = this.printMessage.bind( this );
+        // this.sendAsUserName = this.props.context.pageContext.user.loginName;
+        // this.printMessage = this.printMessage.bind( this );
 
-        this.clientSwagger = client;
-        this.setState( {
-          resolvedSuccess: true
-        } );
+        // this.clientSwagger = client;
+        // this.setState( {
+        //   resolvedError: false,
+        //   resolvedSuccess: true
+        // } );
 
       } )
       .catch( error => { } );

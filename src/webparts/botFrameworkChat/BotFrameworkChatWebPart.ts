@@ -74,7 +74,9 @@ export default class BotFrameworkChatWebPart extends BaseClientSideWebPart<IBotF
               groupName: 'Bot Connection',
               groupFields: [
                 PropertyPaneTextField( 'directLineSecret', {
-                  label: 'Direct Line Secret'
+                  label: 'Direct Line Secret',
+                  deferredValidationTime: 2000,
+                  onGetErrorMessage: this._validateBotConnetionAsync.bind(this)
                 } )
               ]
             },
@@ -179,5 +181,11 @@ export default class BotFrameworkChatWebPart extends BaseClientSideWebPart<IBotF
     }
 
     return "";
+  }
+
+  private _validateBotConnetionAsync( value: string ): Promise<any>{
+    return new Promise( ( resolve, reject ) => {
+      resolve();
+    } );
   }
 }
