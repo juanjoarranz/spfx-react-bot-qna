@@ -13,4 +13,5 @@ export interface IBotFrameworkChatProps {
   userMessagesForegroundColor: string;
   context: IWebPartContext;
   messagesRowHeight: number;
+  displayChatTime: boolean;
 }

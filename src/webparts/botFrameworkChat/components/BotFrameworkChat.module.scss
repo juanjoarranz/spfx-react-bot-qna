@@ -34,16 +34,27 @@
     margin: 5px;
     padding: 10px;
     position: relative;
+    margin-bottom: 20px;
 
     .calloutArrow{
       position: absolute;
       box-shadow: inherit;
       box-sizing: border-box;
       transform: rotate(45deg);
-      height: 16px;
-      width: 16px;
+      height: 12px;
+      width: 12px;
       border: inherit;
-      //background: rgb(0, 120, 212);
+    }
+
+    .timestamp{
+      position: absolute;
+      flex-grow: 1;
+      overflow: hidden;
+      color: rgb(118, 118, 118);
+      font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
+      font-size: 80%;
+      margin-top: 10px;
+      min-width: 150px;
     }
 
     img{

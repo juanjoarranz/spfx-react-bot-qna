@@ -5,7 +5,8 @@ import {
   BaseClientSideWebPart,
   IPropertyPaneConfiguration,
   PropertyPaneTextField,
-  PropertyPaneSlider
+  PropertyPaneSlider,
+  PropertyPaneToggle
 } from '@microsoft/sp-webpart-base';
 import { PropertyFieldColorPicker, PropertyFieldColorPickerStyle } from '@pnp/spfx-property-controls/lib/PropertyFieldColorPicker';
 import * as strings from 'BotFrameworkChatWebPartStrings';
@@ -24,6 +25,7 @@ export interface IBotFrameworkChatWebPartProps {
   userMessagesBackgroundColor: string;
   userMessagesForegroundColor: string;
   messagesRowHeight          : string;
+  displayChatTime             : boolean;
 }
 
 export default class BotFrameworkChatWebPart extends BaseClientSideWebPart<IBotFrameworkChatWebPartProps> {
@@ -43,7 +45,8 @@ export default class BotFrameworkChatWebPart extends BaseClientSideWebPart<IBotF
         userMessagesBackgroundColor: this.properties.userMessagesBackgroundColor,
         userMessagesForegroundColor: this.properties.userMessagesForegroundColor,
         messagesRowHeight          : Number( this.properties.messagesRowHeight ),
-        context                    : this.context
+        context                    : this.context,
+        displayChatTime            : this.properties.displayChatTime
       } );
 
     ReactDom.render( element, this.domElement );
@@ -87,6 +90,12 @@ export default class BotFrameworkChatWebPart extends BaseClientSideWebPart<IBotF
                   min: 200,
                   max: 600,
                   step: 10
+                } ),
+                PropertyPaneToggle( "displayChatTime", {
+                  label: "Display Dialog Time",
+                  checked: true,
+                  onText: "Yes",
+                  offText: "No"
                 } ),
                 PropertyFieldColorPicker( 'titleBarBackgroundColor', {
                   label: 'Title bar background color',

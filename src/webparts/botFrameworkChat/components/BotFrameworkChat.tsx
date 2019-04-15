@@ -21,7 +21,7 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
   private sendAsUserName;
   private conversationUpdateEventText = 'conversationUpdate event detected';
 
-  constructor( props, context ) {
+  constructor( props: IBotFrameworkChatProps, context ) {
     super( props );
     this.state = {
       resolvedError  : false,
@@ -199,11 +199,15 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
         this.messagesHtml = '';
       }
 
+      let chatTimeHtml = this.props.displayChatTime ?
+        `<div class="${styles.timestamp}" style="right:0; text-align: right">You at ${new Date().toLocaleTimeString().replace( /:\d{2}$/, '' )}</div>` : '';
+
       this.messagesHtml +=
         `<span class = "${ styles.message } ${ styles.fromUser } ms-fontSize-mPlus"
           style="background-color: ${this.props.userMessagesBackgroundColor }; color: ${ this.props.userMessagesForegroundColor }">
             ${messageToSend }
-            <div class="${styles.calloutArrow}" style="right: -8px; top: 12px; background-color: ${this.props.userMessagesBackgroundColor }"></div>
+            <div class="${styles.calloutArrow }" style="right: -6px; top: 12px; background-color: ${ this.props.userMessagesBackgroundColor }"></div>
+            ${chatTimeHtml}
         </span>`;
 
       this.directLineClient.Conversations.Conversations_PostMessage( {
@@ -259,11 +263,15 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
         linksToHtml.forEach( link => answerHtml = answerHtml.replace( link, `<a href="${ link }">${ link }</a>` ) );
       }
 
+      let chatTimeHtml = this.props.displayChatTime ?
+        `<div class="${ styles.timestamp }" style="left:0">${ this.props.title } at ${ new Date().toLocaleTimeString().replace( /:\d{2}$/, '' ) }</div>` : '';
+
       this.messagesHtml +=
         `<span class = "${ styles.message } ${ styles.fromBot } ms-fontSize-m"
           style="background-color: ${this.props.botMessagesBackgroundColor }; color: ${ this.props.botMessagesForegroundColor }">
             ${answerHtml }
-            <div class="${styles.calloutArrow}" style="left: -8px; top: 15px; background-color: ${this.props.botMessagesBackgroundColor }"></div>
+            <div class="${styles.calloutArrow }" style="left: -8px; top: 15px; background-color: ${ this.props.botMessagesBackgroundColor }"></div>
+            ${chatTimeHtml}
         </span>`;
 
       this.forceUpdate();
