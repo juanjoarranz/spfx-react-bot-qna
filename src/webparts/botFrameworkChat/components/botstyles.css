@@ -29,7 +29,7 @@
 }
 
 [class^="message"] p {
-  margin: 5px 0;
+  margin: 0 0 12px;
 }
 
 .refresh-icon{
