@@ -3,7 +3,7 @@
   "solution": {
     "name": "SGS QnA Web Chat Bot",
     "id": "1e3d14a8-d863-4a3d-b83a-dbd188d52015",
-    "version": "1.0.7.0",
+    "version": "1.0.8.0",
     "includeClientSideAssets": true,
     "isDomainIsolated": false
   },
