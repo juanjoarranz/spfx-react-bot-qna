@@ -25,8 +25,8 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
 
   private pollInterval = 1000;
   private directLineClient;
-  private conversationId;
   private clientSwagger;
+  private conversationId;
   private messagesHtml;
   private currentMessageToSend;
   private sendAsUserName;
@@ -138,9 +138,7 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
     console.log( 'curren directLineSecret', this.props.directLineSecret );
 
     if ( this.props.directLineSecret && this.props.directLineSecret !== prevProps.directLineSecret) {
-      //if ( !this.clientSwagger ) {
         this._initClientSwagger();
-      //}
     }
   }
 
@@ -154,11 +152,9 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
             this.pollMessages( client, conversationId );
             this.directLineClient = client;
 
-
             this.sendAsUserName = this.props.context.pageContext.user.loginName;
             this.printMessage = this.printMessage.bind( this );
 
-           // this.clientSwagger = client;
             this.setState( {
               resolvedError: false,
               resolvedSuccess: true
@@ -167,23 +163,13 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
           } )
           .catch( error => {
             console.log( 'Client Swagger Creation Error', error );
-            this.clientSwagger = null;
+            this.directLineClient = null;
             this.setState( {
               resolvedSuccess: false,
               resolvedError: true,
               error: error.obj.error.message
-            })
+            } );
           } );
-
-        // this.sendAsUserName = this.props.context.pageContext.user.loginName;
-        // this.printMessage = this.printMessage.bind( this );
-
-        // this.clientSwagger = client;
-        // this.setState( {
-        //   resolvedError: false,
-        //   resolvedSuccess: true
-        // } );
-
       } )
       .catch( error => { } );
   }
@@ -302,9 +288,8 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
       this.messagesHtml = '';
     }
 
-    let answerHtml: string = messageText.replace( /\n/g, '<br/>' );
     let converter = new showdown.Converter();
-    answerHtml = converter.makeHtml( answerHtml );
+    let answerHtml: string = converter.makeHtml( messageText );
 
     // get all links that are not html-ready yet and convert them to html
     let regex: RegExp = /[^"'](https:\/\/[^\s]+)/g;
@@ -328,7 +313,6 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
     this.botInitialized = true;
     this.forceUpdate();
     this.forceMessagesContainerScroll();
-
   }
 
   protected forceMessagesContainerScroll() {
