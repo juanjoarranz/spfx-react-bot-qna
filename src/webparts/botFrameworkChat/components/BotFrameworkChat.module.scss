@@ -2,6 +2,7 @@
   .container {
     max-width: 700px;
     margin: 0px auto;
+    border: 0.7px solid;
   }
 
   .chatHeader {
@@ -32,6 +33,34 @@
     max-width:80%;
     margin: 5px;
     padding: 10px;
+    position: relative;
+    margin-bottom: 20px;
+
+    .calloutArrow{
+      position: absolute;
+      box-shadow: inherit;
+      box-sizing: border-box;
+      transform: rotate(45deg);
+      height: 12px;
+      width: 12px;
+      border: inherit;
+    }
+
+    .timestamp{
+      position: absolute;
+      flex-grow: 1;
+      overflow: hidden;
+      color: rgb(118, 118, 118);
+      font-family: Calibri, "Helvetica Neue", Arial, sans-serif;
+      font-size: 80%;
+      margin-top: 10px;
+      min-width: 200px;
+    }
+
+    img{
+      max-height: 320px;
+      max-width: 100%;
+    }
   }
 
   .fromBot {
@@ -51,7 +80,7 @@
   }
 
   .messageBox input {
-    border: 3px #c8c8c8 solid !important;
+    //border: 3px #c8c8c8 solid !important;
     border-collapse: collapse;
     padding: 15px;
   }

@@ -15,12 +15,14 @@
     "@microsoft/sp-lodash-subset": "1.7.0",
     "@microsoft/sp-office-ui-fabric-core": "1.7.0",
     "@microsoft/sp-webpart-base": "1.7.0",
+    "@pnp/spfx-property-controls": "1.14.1",
     "@types/es6-promise": "0.0.33",
     "@types/react": "16.4.2",
     "@types/react-dom": "16.0.5",
     "@types/webpack-env": "1.13.1",
     "react": "16.3.2",
     "react-dom": "16.3.2",
+    "showdown": "^1.9.0",
     "swagger-client": "^2.1.23"
   },
   "devDependencies": {
