@@ -53,11 +53,11 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
       return (
         <div className={styles.botFrameworkChat}>
           <div className={styles.container}>
-            <div className={css( 'ms-Grid-rowZ ms-font-xl', styles.chatHeader )} style={{ backgroundColor: this.props.titleBarBackgroundColor }} >
+            <div className={css( 'ms-font-xl', styles.chatHeader )} style={{ backgroundColor: this.props.titleBarBackgroundColor }} >
               {this.props.title}
             </div>
 
-            <div className={css( 'ms-Grid-rowZ' )}>
+            <div>
               <h3 style={{color: 'red'}}>Error: Invalid Direct Line Secret in the web part properties</h3>
             </div>
           </div>
