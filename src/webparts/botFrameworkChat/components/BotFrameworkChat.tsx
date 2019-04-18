@@ -25,7 +25,6 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
 
   private pollInterval = 1000;
   private directLineClient;
-  private clientSwagger;
   private conversationId;
   private messagesHtml;
   private currentMessageToSend;
@@ -134,9 +133,6 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
 
   public componentDidUpdate( prevProps: IBotFrameworkChatProps, prevState: {}, prevContext: any ): void {
     console.log( 'component updated' );
-    console.log( 'previous prevProps.directLineSecret', prevProps.directLineSecret );
-    console.log( 'curren directLineSecret', this.props.directLineSecret );
-
     if ( this.props.directLineSecret && this.props.directLineSecret !== prevProps.directLineSecret) {
         this._initClientSwagger();
     }
@@ -179,7 +175,7 @@ export default class BotFrameworkChat extends React.Component<IBotFrameworkChatP
     var directLineSpec = require( './directline-swagger.json' );
 
     return new Promise( ( resolve, reject ) => {
-      this.clientSwagger = new Swagger( {
+      new Swagger( {
           spec: directLineSpec,
           usePromise: true,
         } )
