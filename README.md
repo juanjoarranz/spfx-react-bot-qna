@@ -35,7 +35,7 @@ See more details on how to create a bot from following locations.
 
 Solution|Author(s)
 --------|---------
-spfx-react-bot-framework | [Juanjo Arranz](mailto:juanjose.arranzales@sgs.com)
+spfx-react-bot-framework | [Juanjo Arranz](mailto:juanjoarranzales@gmail.com)
 
 ## Version history
 
